@@ -4,15 +4,15 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -43,6 +43,8 @@ public class ProductosFragment extends Fragment {
     static RecyclerView.Adapter myadaptador;
     static List<Productos> productos;
     View view;
+    ExpandableListView elv;
+    HashMap <String,List<Productos>> productosHash = new HashMap<String,List<Productos>>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -81,16 +83,22 @@ public class ProductosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_productos, container, false);
-
-
+//
+//
         productos = new ArrayList<>();
+//
+//
+//        card = (RecyclerView) view.getRootView().findViewById(R.id.reciclador);
+//        LinearLayoutManager layout = new LinearLayoutManager(getContext());
+//        layout.setOrientation(LinearLayoutManager.VERTICAL);
+//        card.setLayoutManager(layout);
+       elv  = (ExpandableListView) view.findViewById(R.id.lvExp);
         getCarta();
 
-        card = (RecyclerView) view.getRootView().findViewById(R.id.reciclador);
-        LinearLayoutManager layout = new LinearLayoutManager(getContext());
-        layout.setOrientation(LinearLayoutManager.VERTICAL);
-        card.setLayoutManager(layout);
-        return view;
+//        getCarta();
+       return view;
+
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -127,9 +135,12 @@ public class ProductosFragment extends Fragment {
             public void onResponse(Call<List<Productos>> call, Response<List<Productos>> response) {
                 productos = response.body();
 
-                myadaptador = new MyAdapter(productos);
-                MyAdapter.ObtenerTipos();
-                card.setAdapter(myadaptador);
+                //myadaptador = new CartaAdapter(productos,0);
+                CartaAdapter.ObtenerTipos();
+                productosHash=getData2();
+                ExpandableListAdapter adapter2=new ExpandableListAdapter(getContext(),CartaAdapter.tipos,productosHash);
+                elv.setAdapter(adapter2);
+                //card.setAdapter(myadaptador);
             }
 
             @Override
@@ -155,4 +166,27 @@ public class ProductosFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-}
+
+
+        public HashMap<String,List<Productos>> getData2() {
+            HashMap<String, List<Productos>> carta = new HashMap<String, List<Productos>>();
+            List<Productos> productoss ;
+            for (Productos i : productos) {
+
+                if (carta.containsKey(i.getTipo())) {
+                    productoss = carta.get(i.getTipo());
+                } else {
+                   productoss = new ArrayList<Productos>();
+                }
+                productoss.add(i);
+                carta.put(i.getTipo(), productoss);
+            }
+
+
+        System.out.println("HASH : " +carta.toString());
+
+                return carta;
+            }
+
+    }
+

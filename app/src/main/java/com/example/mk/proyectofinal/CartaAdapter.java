@@ -6,11 +6,13 @@ package com.example.mk.proyectofinal;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -18,9 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+class CartaAdapter extends RecyclerView.Adapter<CartaAdapter.ViewHolder> {
     static List<Productos> carta;
     static List<String> tipos;
+    static RecyclerView card;
+    static int tipo=0;
+    //static ProductosAdapter adapter;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -33,22 +38,27 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         public ViewHolder(View v) {
             super(v);
-            tipo= (TextView) v.findViewById(R.id.tipo);
+
+            tipo = (TextView) v.findViewById(R.id.tipo);
             imagen = (ImageView) v.findViewById(R.id.imagen);
+            card = (RecyclerView) v.getRootView().findViewById(R.id.reciclador);
+
+
 
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(List<Productos> productos) {
+    public CartaAdapter(List<Productos> productos, int tipo) {
         carta = productos;
+        this.tipo=tipo;
         ObtenerTipos();
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+    public CartaAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                      int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item, parent, false);
@@ -62,13 +72,31 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        holder.tipo.setText(tipos.get(position).toString());
-        insertarImagenes(holder);
+            holder.tipo.setText(tipos.get(position).toString());
+            insertarImagenes(holder);
+//       ExpandableListView view;
+//        view = (ExpandableListView) holder.tipo.getRootView().findViewById(R.id.expandableListView);
+//        adapter = new ProductosAdapter(carta);
+//        ;
+//        view.setAdapter(adapter);
 
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("EEEE", ""+tipos.get(position).toString());
+
+                    Toast.makeText(v.getContext(), "YEEEEEEEEEEE", Toast.LENGTH_SHORT).show();
+
+
+
+            }
+        });
+
+            // - get element from your dataset at this position
+            // - replace the contents of the view with that element
+
 
 
     }
@@ -81,9 +109,12 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public static void ObtenerTipos(){
         tipos=new ArrayList<>();
 
-        for (Productos producto: carta){
+
+        for (Productos producto: ProductosFragment.productos){
+            if (!tipos.contains(producto)) {
 
                 tipos.add(producto.getTipo());
+            }
 
         }
     }
@@ -93,8 +124,7 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             Context context = viewHolder.imagen.getContext();
             Picasso.with(context)
                     .load(R.drawable.jarra2)
-                    .resize(250,300)
-
+                    .resize(250, 300)
 
 
                     .into(viewHolder.imagen)
@@ -104,7 +134,7 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         if (viewHolder.tipo.getText().equals("Carne")) {
             Context context = viewHolder.imagen.getContext();
             Picasso.with(context)
-                    .load(R.drawable.solomillo)
+                    .load(R.drawable.carne3)
                     .resize(350,400)
 
 
@@ -114,7 +144,8 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         }
 
-        }
+
+    }
 
     }
 
