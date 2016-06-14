@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -25,12 +27,21 @@ class ExpandableListAdapter extends BaseExpandableListAdapter {
     // header titles
     // child data in format of header title, child title
     private HashMap<String, List<Productos>> _listDataChild;
+   static  List<Productos> productos_pedidos;
+    static Pedido pedido_total;
+    ImageButton bdel;
+    View vistahijo;
+    static ArrayList<String> fromColumns;
+    static View view2;
 
     public ExpandableListAdapter(Context context, List<String> tipos, HashMap<String, List<Productos>> producto) {
         _listDataHeader = new ArrayList<>();
         for (String key : producto.keySet()) {
             System.out.println(key);
             _listDataHeader.add(key);
+            if (productos_pedidos==null) {
+                productos_pedidos = new ArrayList<>();
+            }
 
         }
         this._context = context;
@@ -56,10 +67,12 @@ class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition,
+    public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
+        vistahijo=convertView;
 
 
+        final Productos producto = (Productos) getChild(groupPosition, childPosition);
         final String childText = getGroup(groupPosition).toString();
         final Productos expandedListText = (Productos) getChild(groupPosition, childPosition);
 
@@ -77,6 +90,30 @@ class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         txtListChild.setText(expandedListText.getProducto());
         precio.setText((int) expandedListText.getPrecio() + " €");
+        ImageButton button = (ImageButton) convertView.findViewById(R.id.add);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Pedido_Producto producto_pedido=new Pedido_Producto(1,producto.getId(),1,1,producto.getEstado(),1);
+                Productos producto1 = (Productos) getChild(groupPosition, childPosition);
+                productos_pedidos.add(producto1);
+
+               // showLocationDialog(productos_pedidos);
+                //mostrardialog2();
+                fromColumns = new ArrayList<>();
+                double suma=0;
+                for (Productos producto:productos_pedidos){
+                    fromColumns.add(producto.getProducto()+"   -   "+producto.getPrecio()+" E");
+                    suma=suma+producto.getPrecio();
+                }
+
+                fromColumns.add("TOTAL PEDIDO: "+suma+" €");
+                Toast.makeText(_context, "" + (((Productos) getChild(groupPosition, childPosition)).getProducto().toString()) + " añadido a pedido" , Toast.LENGTH_SHORT).show();
+                MainActivity.carro.setVisible(true);
+            }
+
+        });
+
         //txtListChild.setText(childText);
 
 
@@ -133,6 +170,7 @@ class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
+
         return true;
     }
 
@@ -141,7 +179,7 @@ class ExpandableListAdapter extends BaseExpandableListAdapter {
             Context context = this._context;
             Picasso.with(context)
                     .load(R.drawable.jarra2)
-                    .resize(250, 250)
+                    .resize(200, 200)
 
 
                     .into(image)
@@ -158,7 +196,24 @@ class ExpandableListAdapter extends BaseExpandableListAdapter {
                     .into(image);
 
         }
+        if (tipo.equals("Pescado")) {
+            Context context = this._context;
+            Picasso.with(context)
+                    .load(R.drawable.pescao2)
+                    .resize(250, 250)
+
+
+                    .into(image);
+
+        }
 
     }
-}
+
+
+    }
+
+
+
+
+
 

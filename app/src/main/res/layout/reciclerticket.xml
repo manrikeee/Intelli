@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    android:background="#403150e7">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/re"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Producto"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Uds"
+            android:id="@+id/textView4"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginRight="30dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Precio"
+            android:id="@+id/textView5"
+            android:layout_gravity="right|top"
+            android:layout_marginRight="40dp" />
+
+    </FrameLayout>
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+
+
+    android:id="@+id/frame">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/RecView"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+
+        android:layout_marginBottom="50dp"
+        android:layout_below="@id/re"
+        android:layout_above="@+id/relative"
+
+        android:layout_marginTop="30dp" />
+
+
+</FrameLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relative"
+        android:layout_alignBottom="@id/frame"
+        android:layout_alignParentStart="true">
+
+
+
+        >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pedir"
+        android:id="@+id/bpedir"
+        android:textSize="30dp"
+
+         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seguir "
+        android:id="@+id/bseguir"
+        android:layout_alignBottom="@+id/bpedir"
+        android:layout_alignParentEnd="true"
+        android:textSize="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Total:"
+        android:id="@+id/textView3"
+
+
+        android:layout_toEndOf="@+id/ptotal"
+        android:textSize="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/ptotal"
+        android:textSize="20dp"
+
+        android:layout_toEndOf="@+id/bpedir"
+        android:text="TOTAL" />
+    </RelativeLayout>
+</RelativeLayout>
