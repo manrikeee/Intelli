@@ -1,4 +1,4 @@
-package com.example.mk.proyectofinal;
+package com.example.mk.proyectofinal.Adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -11,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mk.proyectofinal.MainActivity;
+import com.example.mk.proyectofinal.Modelo.Pedido;
+import com.example.mk.proyectofinal.Modelo.Productos;
+import com.example.mk.proyectofinal.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,21 +24,21 @@ import java.util.List;
 /**
  * Created by Mk on 31/05/2016.
  */
-class ExpandableListAdapter extends BaseExpandableListAdapter {
+public class ExpandList extends BaseExpandableListAdapter {
 
     private Context _context;
     private List<String> _listDataHeader;
     // header titles
     // child data in format of header title, child title
     private HashMap<String, List<Productos>> _listDataChild;
-   static  List<Productos> productos_pedidos;
+   public static  List<Productos> productos_pedidos;
     static Pedido pedido_total;
     ImageButton bdel;
     View vistahijo;
-    static ArrayList<String> fromColumns;
+    public static ArrayList<String> fromColumns;
     static View view2;
 
-    public ExpandableListAdapter(Context context, List<String> tipos, HashMap<String, List<Productos>> producto) {
+    public ExpandList(Context context, List<String> tipos, HashMap<String, List<Productos>> producto) {
         _listDataHeader = new ArrayList<>();
         for (String key : producto.keySet()) {
             System.out.println(key);

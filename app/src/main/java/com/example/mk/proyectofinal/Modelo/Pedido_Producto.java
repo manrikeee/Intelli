@@ -1,4 +1,4 @@
-package com.example.mk.proyectofinal;
+package com.example.mk.proyectofinal.Modelo;
 
 /**
  * Created by Mk on 02/06/2016.

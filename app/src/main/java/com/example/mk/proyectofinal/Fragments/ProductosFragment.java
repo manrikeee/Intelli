@@ -1,4 +1,4 @@
-package com.example.mk.proyectofinal;
+package com.example.mk.proyectofinal.Fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,6 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+
+import com.example.mk.proyectofinal.Adapters.ExpandList;
+import com.example.mk.proyectofinal.Modelo.Productos;
+import com.example.mk.proyectofinal.Modelo.RestClient;
+import com.example.mk.proyectofinal.R;
+import com.example.mk.proyectofinal.Services.CartaService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +47,8 @@ public class ProductosFragment extends Fragment {
     private String mParam2;
     static RecyclerView card;
     static RecyclerView.Adapter myadaptador;
-    static List<Productos> productos;
+    public static List<Productos> productos;
+    public static List<String> tipos;
     View view;
     ExpandableListView elv;
     HashMap <String,List<Productos>> productosHash = new HashMap<String,List<Productos>>();
@@ -136,9 +143,9 @@ public class ProductosFragment extends Fragment {
                 productos = response.body();
 
                 //myadaptador = new CartaAdapter(productos,0);
-                CartaAdapter.ObtenerTipos();
+                ProductosFragment.ObtenerTipos();
                 productosHash=getData2();
-                ExpandableListAdapter adapter2=new ExpandableListAdapter(getContext(),CartaAdapter.tipos,productosHash);
+                ExpandList adapter2=new ExpandList(getContext(),ProductosFragment.tipos,productosHash);
                 elv.setAdapter(adapter2);
                 //card.setAdapter(myadaptador);
             }
@@ -187,6 +194,18 @@ public class ProductosFragment extends Fragment {
 
                 return carta;
             }
+    public static void ObtenerTipos(){
+        tipos=new ArrayList<>();
+
+
+        for (Productos producto: ProductosFragment.productos){
+            if (!tipos.contains(producto)) {
+
+                tipos.add(producto.getTipo());
+            }
+
+        }
+    }
 
     }
 

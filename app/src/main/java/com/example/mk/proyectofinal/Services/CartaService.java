@@ -1,4 +1,6 @@
-package com.example.mk.proyectofinal;
+package com.example.mk.proyectofinal.Services;
+
+import com.example.mk.proyectofinal.Modelo.Productos;
 
 import java.util.List;
 

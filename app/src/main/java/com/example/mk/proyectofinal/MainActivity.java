@@ -18,12 +18,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.mk.proyectofinal.Fragments.MyDialogFragment;
+import com.example.mk.proyectofinal.Fragments.ProductosFragment;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-   static FragmentManager fm;
+  public  static FragmentManager fm;
     static Button notifCount;
     static int mNotifCount = 0;
-    static MenuItem carro;
+    public static MenuItem carro;
     View view;
 
 

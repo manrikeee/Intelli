@@ -1,4 +1,4 @@
-package com.example.mk.proyectofinal;
+package com.example.mk.proyectofinal.Fragments;
 
 
 import android.os.Bundle;
@@ -11,12 +11,17 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 
+import com.example.mk.proyectofinal.Adapters.ExpandList;
+import com.example.mk.proyectofinal.Adapters.TicketAdapter;
+import com.example.mk.proyectofinal.Modelo.Productos;
+import com.example.mk.proyectofinal.R;
+
 /**
  * Created by Mk on 13/06/2016.
  */
 public  class MyDialogFragment extends DialogFragment {
     private RecyclerView mRecyclerView;
-    private HorasAdapter adapter;
+    private TicketAdapter adapter;
     static TextView total;
 
     static MyDialogFragment newInstance() {
@@ -33,7 +38,7 @@ public  class MyDialogFragment extends DialogFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         total= (TextView) v.findViewById(R.id.ptotal);
         //setadapter
-         adapter = new HorasAdapter(ExpandableListAdapter.fromColumns,this);
+         adapter = new TicketAdapter(ExpandList.fromColumns,this);
 
         mRecyclerView.setAdapter(adapter);
 
@@ -41,12 +46,12 @@ public  class MyDialogFragment extends DialogFragment {
         return v;
     }
     public static void Actualizartotal(){
-        HorasAdapter.total=0;
-        for (Productos producto: ExpandableListAdapter.productos_pedidos){
+        TicketAdapter.total=0;
+        for (Productos producto: ExpandList.productos_pedidos){
             Double precio=Double.parseDouble(String.valueOf(producto.getPrecio()));
-            HorasAdapter.total=HorasAdapter.total+ precio;
+            TicketAdapter.total= TicketAdapter.total+ precio;
         }
-        total.setText(String.valueOf(HorasAdapter.total)+" €");
+        total.setText(String.valueOf(TicketAdapter.total)+" €");
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.mk.proyectofinal;
+package com.example.mk.proyectofinal.Modelo;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

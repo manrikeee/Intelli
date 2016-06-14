@@ -1,4 +1,4 @@
-package com.example.mk.proyectofinal;
+package com.example.mk.proyectofinal.Adapters;
 
 /**
  * Created by Mk on 13/06/2016.
@@ -12,22 +12,27 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mk.proyectofinal.Fragments.MyDialogFragment;
+import com.example.mk.proyectofinal.MainActivity;
+import com.example.mk.proyectofinal.Modelo.Productos;
+import com.example.mk.proyectofinal.R;
+
 import java.util.List;
 
-public class HorasAdapter extends RecyclerView.Adapter<HorasAdapter.ItemViewHolder>{
+public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ItemViewHolder>{
     List<Productos> horas;
-    static double total=0;
+    public static double total=0;
     MyDialogFragment dialog;
 
-    public HorasAdapter(List<String> horas,MyDialogFragment dialog) {
+    public TicketAdapter(List<String> horas, MyDialogFragment dialog) {
         MainActivity.carro.setVisible(true);
         this.dialog=dialog;
 
-        this.horas = ExpandableListAdapter.productos_pedidos;
+        this.horas = ExpandList.productos_pedidos;
     }
 
     @Override
-    public HorasAdapter.ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public TicketAdapter.ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.dialog, viewGroup, false);
         ItemViewHolder pvh = new ItemViewHolder(v);
         return pvh;
@@ -35,7 +40,7 @@ public class HorasAdapter extends RecyclerView.Adapter<HorasAdapter.ItemViewHold
     }
 
     @Override
-    public void onBindViewHolder(final HorasAdapter.ItemViewHolder holder, final int position) {
+    public void onBindViewHolder(final TicketAdapter.ItemViewHolder holder, final int position) {
 
         holder.time.setText(horas.get(position).getProducto().toString());
         holder.precio.setText( String.valueOf(horas.get(position).getPrecio())) ;
@@ -45,7 +50,7 @@ public class HorasAdapter extends RecyclerView.Adapter<HorasAdapter.ItemViewHold
             public void onClick(View v) {
 
                // horas.remove(position);
-                ExpandableListAdapter.productos_pedidos.remove(position);
+                ExpandList.productos_pedidos.remove(position);
                 if(horas.size()==0){
                     MainActivity.carro.setVisible(false);
                     dialog.dismiss();
