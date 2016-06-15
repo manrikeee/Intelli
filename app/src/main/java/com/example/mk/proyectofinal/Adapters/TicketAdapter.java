@@ -53,7 +53,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ItemViewHo
                 horas.get(position).setCant(horas.get(position).getCant()-1);
                 if (horas.get(position).getCant()<1) {
 
-
+                    CartaExpandAdapter.productos_totales=0;
                     CartaExpandAdapter.productos_pedidos.remove(position);
                 }else{
 
@@ -66,6 +66,8 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ItemViewHo
                     dialog.dismiss();
                 }
                 Log.e("ERRORR",""+CartaExpandAdapter.productos_pedidos.toString());
+                CartaExpandAdapter.productos_totales--;
+                MainActivity.notifCount.setText(String.valueOf(CartaExpandAdapter.productos_totales));
 
 
 
@@ -110,4 +112,3 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ItemViewHo
     }
 
 }
-

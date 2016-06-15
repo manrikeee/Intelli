@@ -57,6 +57,7 @@ public  class MyDialogFragment extends DialogFragment {
         pedir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 crearPedido();
             }
         });
@@ -83,6 +84,8 @@ public  class MyDialogFragment extends DialogFragment {
             Pedido_Producto pedido = new Pedido_Producto();
             pedido.setCantidad(producto1.getCant());
             pedido.setMesa(Login_QR.mesa);
+            pedido.setNombre(producto1.getProducto());
+            Toast.makeText(getContext(), "NOMBRE PRODUCTO:"+pedido.getNombre(), Toast.LENGTH_SHORT).show();
             pedido.setId_producto(producto1.getId());
             Log.e("PEDIDOID",""+pedido.getId_producto());
             pedido.setId_pedido(MainActivity.id_pedido);
@@ -105,17 +108,19 @@ public  class MyDialogFragment extends DialogFragment {
 
 
                 CartaService servicio = retrofit.create(CartaService.class);
-                Call<String> respuesta = servicio.crearPedido(pedido.getId_producto(),pedido.getCantidad(),pedido.getMesa(),MainActivity.id_pedido);
+                Call<String> respuesta = servicio.crearPedido(pedido.getId_producto(),pedido.getCantidad(),pedido.getMesa(),MainActivity.id_pedido,pedido.getNombre());
                final String respuesta2;
                 respuesta.enqueue(new Callback<String>() {
 
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
-                        Toast.makeText(getActivity(), "Pedido Realizado", Toast.LENGTH_SHORT).show();;
+//                        Toast.makeText(getActivity(), "Pedido Realizado", Toast.LENGTH_SHORT).show();;
                         mProgressDialog.dismiss();
                         dismiss();
                         CartaExpandAdapter.productos_pedidos.clear();
                         MainActivity.carro.setVisible(false);
+                        CartaExpandAdapter.productos_totales=0;
+                        MainActivity.notifCount.setText(String.valueOf(CartaExpandAdapter.productos_totales));
 
 
 
@@ -124,6 +129,7 @@ public  class MyDialogFragment extends DialogFragment {
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
+                        mProgressDialog.dismiss();
                         Log.i("allEvents", "ERROR12 : " + t.getMessage());
                     }
                 });

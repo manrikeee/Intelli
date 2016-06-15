@@ -39,6 +39,7 @@ public class CartaExpandAdapter extends BaseExpandableListAdapter {
     View vistahijo;
     public static ArrayList<String> fromColumns;
     static View view2;
+    public static int  productos_totales=0;
 
     public CartaExpandAdapter(Context context, List<String> tipos, HashMap<String, List<Productos>> producto) {
         _listDataHeader = new ArrayList<>();
@@ -117,6 +118,8 @@ public class CartaExpandAdapter extends BaseExpandableListAdapter {
 
                 Toast.makeText(_context, "" + (((Productos) getChild(groupPosition, childPosition)).getProducto().toString()) + " añadido a pedido" , Toast.LENGTH_SHORT).show();
                 MainActivity.carro.setVisible(true);
+                productos_totales++;
+                MainActivity.notifCount.setText(String.valueOf(productos_totales));
             }
 
         });

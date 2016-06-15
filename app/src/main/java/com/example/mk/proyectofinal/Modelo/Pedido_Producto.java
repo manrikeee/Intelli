@@ -10,18 +10,28 @@ public class Pedido_Producto {
     int mesa;
     int estado;
     int id_pedido;
+    String nombre;
 
-    public Pedido_Producto(int id, int id_producto, int cantidad, int mesa, int estado, int id_pedido) {
+    public Pedido_Producto(int id, int id_producto, int cantidad, int mesa, int estado, int id_pedido,String nombre) {
         this.id = id;
         this.id_producto = id_producto;
         this.cantidad = cantidad;
         this.mesa = mesa;
         this.estado = estado;
         this.id_pedido = id_pedido;
+        this.nombre=nombre;
 
     }
 
     public Pedido_Producto() {
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public int getId() {

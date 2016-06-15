@@ -1,0 +1,102 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.mk.proyectofinal.Fragments.CuentaFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="341dp"
+        android:layout_height="495dp"
+        android:layout_margin="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Producto"
+
+            android:id="@+id/producto"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Uds"
+            android:id="@+id/textView3"
+            android:layout_alignBottom="@+id/producto"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Precio"
+            android:id="@+id/textView5"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+        <View
+            android:layout_below="@+id/producto"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/background_dark"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/RecView"
+
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginLeft="0dp"
+
+            android:layout_below="@id/producto"
+
+
+            android:layout_alignParentEnd="true" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/pedircuenta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:clickable="true"
+            android:src="@drawable/ic_cast_dark"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/profile_edit_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:clickable="true"
+            android:src="@drawable/places_ic_clear"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Total"
+            android:id="@+id/ptotal"
+            android:singleLine="false"
+            android:layout_below="@+id/RecView"
+            android:layout_toStartOf="@+id/textView5" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Total"
+            android:id="@+id/total_cuenta"
+            android:singleLine="false"
+            android:layout_alignTop="@+id/ptotal"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+
+</LinearLayout>

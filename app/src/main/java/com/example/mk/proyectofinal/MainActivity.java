@@ -8,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.mk.proyectofinal.Fragments.CuentaFragment;
 import com.example.mk.proyectofinal.Fragments.MyDialogFragment;
 import com.example.mk.proyectofinal.Fragments.ProductosFragment;
 import com.example.mk.proyectofinal.Modelo.RestClient;
@@ -33,10 +35,11 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
   public  static FragmentManager fm;
-    static Button notifCount;
+    public static Button notifCount;
     static int mNotifCount = 0;
     public static MenuItem carro;
-    public static int id_pedido=1;
+    public static int id_pedido;
+
     View view;
 
 
@@ -86,7 +89,25 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        carro=  menu.findItem(R.id.action_settings);
+        MenuItem item = menu.findItem(R.id.action_settings);
+        MenuItemCompat.setActionView(item, R.layout.feed_update_count);
+        notifCount = (Button) MenuItemCompat.getActionView(item);
+        notifCount.setText("1");
+        carro=item;
+        carro.setVisible(false);
+        notifCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showdialog();
+            }
+        });
+
+
+
+
+
+
+
 
 
 
@@ -138,6 +159,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
+            fragment = new CuentaFragment();
+            fragmentTransaction = true;
 
         }
         if (fragmentTransaction) {
@@ -163,7 +186,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public  void crearPedido(){
+    public static void crearPedido(){
 
 
         RestClient restClient = new RestClient();
@@ -177,10 +200,12 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-               Log.e("PEDIDO","CREADO");
+
                 respuesta2[0] =response.body();
                 id_pedido=Integer.parseInt(respuesta2[0]);
-                setPreferences();
+                Log.e("PEDIDO","CREADO:"+respuesta2[0]);
+                CuentaFragment.estado=0;
+               // getPreferences();
 
 
             }
@@ -202,11 +227,12 @@ public class MainActivity extends AppCompatActivity
     public  void getPreferences(){
         int name=0;
         SharedPreferences prefs = getSharedPreferences("estado", MODE_PRIVATE);
-        String restoredText = prefs.getString("id_pedido", null);
-        if (restoredText != null) {
+        int restoredText = prefs.getInt("id_pedido", 0);
+        if (restoredText !=0) {
             name = prefs.getInt("id_pedido", 0);//"No name defined" is the default value.
             //0 is the default value.
-        }else {
+        }if (restoredText!=id_pedido) {
+
             setPreferences();
         }
         Toast.makeText(MainActivity.this, "getPreferences: "+name, Toast.LENGTH_SHORT).show();
