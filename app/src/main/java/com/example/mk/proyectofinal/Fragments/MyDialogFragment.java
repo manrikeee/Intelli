@@ -1,20 +1,33 @@
 package com.example.mk.proyectofinal.Fragments;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.mk.proyectofinal.Adapters.ExpandList;
+import com.example.mk.proyectofinal.Adapters.CartaExpandAdapter;
 import com.example.mk.proyectofinal.Adapters.TicketAdapter;
+import com.example.mk.proyectofinal.Login_QR;
+import com.example.mk.proyectofinal.MainActivity;
+import com.example.mk.proyectofinal.Modelo.Pedido_Producto;
 import com.example.mk.proyectofinal.Modelo.Productos;
+import com.example.mk.proyectofinal.Modelo.RestClient;
 import com.example.mk.proyectofinal.R;
+import com.example.mk.proyectofinal.Services.CartaService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * Created by Mk on 13/06/2016.
@@ -23,6 +36,9 @@ public  class MyDialogFragment extends DialogFragment {
     private RecyclerView mRecyclerView;
     private TicketAdapter adapter;
     static TextView total;
+    public TextView pedir;
+    static ProgressDialog mProgressDialog;
+
 
     static MyDialogFragment newInstance() {
         MyDialogFragment f = new MyDialogFragment();
@@ -37,8 +53,15 @@ public  class MyDialogFragment extends DialogFragment {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.RecView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         total= (TextView) v.findViewById(R.id.ptotal);
+        pedir=(TextView) v.findViewById(R.id.bpedir);
+        pedir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crearPedido();
+            }
+        });
         //setadapter
-         adapter = new TicketAdapter(ExpandList.fromColumns,this);
+         adapter = new TicketAdapter(CartaExpandAdapter.fromColumns,this);
 
         mRecyclerView.setAdapter(adapter);
 
@@ -47,11 +70,66 @@ public  class MyDialogFragment extends DialogFragment {
     }
     public static void Actualizartotal(){
         TicketAdapter.total=0;
-        for (Productos producto: ExpandList.productos_pedidos){
+        for (Productos producto: CartaExpandAdapter.productos_pedidos){
             Double precio=Double.parseDouble(String.valueOf(producto.getPrecio()));
-            TicketAdapter.total= TicketAdapter.total+ precio;
+            TicketAdapter.total= TicketAdapter.total+ (precio*producto.getCant());
         }
         total.setText(String.valueOf(TicketAdapter.total)+" €");
     }
 
+    public void crearPedido() {
+
+        for (Productos producto1 : CartaExpandAdapter.productos_pedidos) {
+            Pedido_Producto pedido = new Pedido_Producto();
+            pedido.setCantidad(producto1.getCant());
+            pedido.setMesa(Login_QR.mesa);
+            pedido.setId_producto(producto1.getId());
+            Log.e("PEDIDOID",""+pedido.getId_producto());
+            pedido.setId_pedido(MainActivity.id_pedido);
+            hacerPedido(pedido);
+
+
+
+        }
+    }
+
+        public void hacerPedido(Pedido_Producto pedido){
+            mProgressDialog = new ProgressDialog(getContext());
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setMessage("Realizando pedido...");
+            mProgressDialog.show();
+
+
+                RestClient restClient = new RestClient();
+                Retrofit retrofit = restClient.getRetrofit();
+
+
+                CartaService servicio = retrofit.create(CartaService.class);
+                Call<String> respuesta = servicio.crearPedido(pedido.getId_producto(),pedido.getCantidad(),pedido.getMesa(),MainActivity.id_pedido);
+               final String respuesta2;
+                respuesta.enqueue(new Callback<String>() {
+
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Toast.makeText(getActivity(), "Pedido Realizado", Toast.LENGTH_SHORT).show();;
+                        mProgressDialog.dismiss();
+                        dismiss();
+                        CartaExpandAdapter.productos_pedidos.clear();
+                        MainActivity.carro.setVisible(false);
+
+
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.i("allEvents", "ERROR12 : " + t.getMessage());
+                    }
+                });
+            //dismiss();
+
+            }
 }
+
+

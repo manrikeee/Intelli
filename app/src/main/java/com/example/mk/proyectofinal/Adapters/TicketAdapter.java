@@ -5,6 +5,7 @@ package com.example.mk.proyectofinal.Adapters;
  */
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ItemViewHo
         MainActivity.carro.setVisible(true);
         this.dialog=dialog;
 
-        this.horas = ExpandList.productos_pedidos;
+        this.horas = CartaExpandAdapter.productos_pedidos;
     }
 
     @Override
@@ -45,16 +46,28 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ItemViewHo
         holder.time.setText(horas.get(position).getProducto().toString());
         holder.precio.setText( String.valueOf(horas.get(position).getPrecio())) ;
 //        holder.total.setText("EEEEEE");
+        holder.cantidad.setText(String.valueOf(horas.get(position).getCant()));
         holder.del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                horas.get(position).setCant(horas.get(position).getCant()-1);
+                if (horas.get(position).getCant()<1) {
 
-               // horas.remove(position);
-                ExpandList.productos_pedidos.remove(position);
-                if(horas.size()==0){
+
+                    CartaExpandAdapter.productos_pedidos.remove(position);
+                }else{
+
+                    horas.get(position).setPrecio_total();
+
+                }
+                if((horas.size()==0) ){
+                    CartaExpandAdapter.productos_pedidos.clear();
                     MainActivity.carro.setVisible(false);
                     dialog.dismiss();
                 }
+                Log.e("ERRORR",""+CartaExpandAdapter.productos_pedidos.toString());
+
+
 
                 notifyDataSetChanged();
             }
@@ -79,7 +92,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ItemViewHo
         TextView time;
         public ImageButton del;
         TextView precio;
-
+        TextView cantidad;
 
         ImageView reloj;
 
@@ -89,6 +102,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ItemViewHo
             time = (TextView) itemView.findViewById(R.id.text1);
             del = (ImageButton) itemView.findViewById(R.id.delete);
             precio= (TextView) itemView.findViewById(R.id.precio);
+            cantidad= (TextView) itemView.findViewById(R.id.unidades);
 
 
 

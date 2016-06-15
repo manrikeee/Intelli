@@ -1,5 +1,6 @@
 package com.example.mk.proyectofinal.Fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
-import com.example.mk.proyectofinal.Adapters.ExpandList;
+import com.example.mk.proyectofinal.Adapters.CartaExpandAdapter;
 import com.example.mk.proyectofinal.Modelo.Productos;
 import com.example.mk.proyectofinal.Modelo.RestClient;
 import com.example.mk.proyectofinal.R;
@@ -50,6 +51,7 @@ public class ProductosFragment extends Fragment {
     public static List<Productos> productos;
     public static List<String> tipos;
     View view;
+    public static ProgressDialog mProgressDialog;
     ExpandableListView elv;
     HashMap <String,List<Productos>> productosHash = new HashMap<String,List<Productos>>();
 
@@ -128,6 +130,10 @@ public class ProductosFragment extends Fragment {
     }
 
     public void getCarta(){
+        mProgressDialog = new ProgressDialog(getContext());
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Obteniendo carta...");
+        mProgressDialog.show();
 
         RestClient restClient = new RestClient();
         Retrofit retrofit = restClient.getRetrofit();
@@ -145,8 +151,9 @@ public class ProductosFragment extends Fragment {
                 //myadaptador = new CartaAdapter(productos,0);
                 ProductosFragment.ObtenerTipos();
                 productosHash=getData2();
-                ExpandList adapter2=new ExpandList(getContext(),ProductosFragment.tipos,productosHash);
+                CartaExpandAdapter adapter2=new CartaExpandAdapter(getContext(),ProductosFragment.tipos,productosHash);
                 elv.setAdapter(adapter2);
+
                 //card.setAdapter(myadaptador);
             }
 

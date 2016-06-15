@@ -8,7 +8,9 @@ public class Productos {
     String producto;
     double precio;
     int estado;
+    int cant=1;
     String tipo;
+    double precio_total;
 
     public Productos(int id, String producto, double precio, int estado,String tipo) {
         this.id = id;
@@ -16,9 +18,29 @@ public class Productos {
         this.precio = precio;
         this.estado = estado;
         this.tipo=tipo;
+
+    }
+
+    public double getPrecio_total() {
+        return precio_total;
+    }
+
+    public void setPrecio_total() {
+        this.precio_total = precio*cant;
     }
 
     public Productos() {
+    }
+
+    public int getCant() {
+        return cant;
+    }
+
+    public void setCant(int cant) {
+
+            this.cant = cant;
+
+
     }
 
     public String getTipo() {

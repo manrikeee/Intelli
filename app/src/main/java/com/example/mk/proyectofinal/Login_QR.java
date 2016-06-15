@@ -1,7 +1,9 @@
 package com.example.mk.proyectofinal;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -25,11 +27,16 @@ public class Login_QR extends Activity {
     private CameraSource cameraSource;
     private SurfaceView cameraView;
     private TextView barcodeInfo;
+    public static int mesa;
+    Intent i = null;
+    static ProgressDialog mProgressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_qr);
+        getPreferences();
 
         cameraView = (SurfaceView) findViewById(R.id.camera_view);
         barcodeInfo = (TextView) findViewById(R.id.code_info);
@@ -83,19 +90,32 @@ public class Login_QR extends Activity {
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
 
-                if (barcodes.size() != 0)  {
-                    if(barcodes.valueAt(0).displayValue.equals(("Mesa 1"))){
 
 
-                        lanzarActivity();
+                if (barcodes.size() != 0) {
+
+                    String qr;
+                    qr = String.valueOf(barcodes.valueAt(0).displayValue).substring(0, 1);
+                    if (qr.equals("1")) {
+
+                        mesa=Integer.parseInt(qr);
+
+
+                     lanzarActivity();
+
+
                     }
+
 
                     barcodeInfo.post(new Runnable() {    // Use the post method of the TextView
                         public void run() {
+
                             barcodeInfo.setText(    // Update the TextView
                                     barcodes.valueAt(0).displayValue
 
+
                             );
+
                         }
                     });
 
@@ -105,10 +125,18 @@ public class Login_QR extends Activity {
         });
 
     }
-    public void lanzarActivity( ){
-       // Toast.makeText(Login_QR.this, "Bienvenido." ,Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
+
+    public void lanzarActivity() {
+        // Toast.makeText(Login_QR.this, "Bienvenido." ,Toast.LENGTH_SHORT).show();
+
+        if (i==null) {
+
+            i = new Intent(this, MainActivity.class);
+            startActivity(i);
+
+            mProgressDialog.dismiss();
+            Toast.makeText(Login_QR.this, "Bienvenido. Sentado en mesa: "+mesa, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -118,11 +146,30 @@ public class Login_QR extends Activity {
         barcodeDetector.release();
     }
 
-    public void comprobarQR(){
-        if(barcodeInfo.getText().equals("Mesa 1")) {
+    public void comprobarQR() {
+
+        if (barcodeInfo.getText().toString().equals("1")) {
             Toast.makeText(Login_QR.this, "Bienvenido. Sentado en ", Toast.LENGTH_SHORT).show();
-            //lanzarActivity();
+            lanzarActivity();
 
         }
+    }
+
+
+    public void getPreferences() {
+        int name = 0;
+        SharedPreferences prefs = getSharedPreferences("estado", MODE_PRIVATE);
+        int restoredText = Integer.parseInt(prefs.getString("id_pedido", "0"));
+        if (restoredText !=0) {
+            name = prefs.getInt("id_pedido", 0);//"No name defined" is the default value.
+            if (name>0){
+                lanzarActivity();
+                finish();
+            }
+            //0 is the default value.
+        } else {
+
+        }
+        // Toast.makeText(MainActivity.this, "getPreferences: "+name, Toast.LENGTH_SHORT).show();
     }
 }

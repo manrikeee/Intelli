@@ -15,7 +15,7 @@ public class RestClient {
     Retrofit retrofit;
 
     public RestClient() {
-        final String BASE_URL = "http://192.168.1.104";
+        final String BASE_URL = "http://intellibar.esy.es";
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd")
 

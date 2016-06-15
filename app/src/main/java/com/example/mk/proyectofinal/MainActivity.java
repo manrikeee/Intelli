@@ -1,14 +1,16 @@
 package com.example.mk.proyectofinal;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,6 +22,13 @@ import android.widget.Toast;
 
 import com.example.mk.proyectofinal.Fragments.MyDialogFragment;
 import com.example.mk.proyectofinal.Fragments.ProductosFragment;
+import com.example.mk.proyectofinal.Modelo.RestClient;
+import com.example.mk.proyectofinal.Services.CartaService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -27,6 +36,7 @@ public class MainActivity extends AppCompatActivity
     static Button notifCount;
     static int mNotifCount = 0;
     public static MenuItem carro;
+    public static int id_pedido=1;
     View view;
 
 
@@ -41,14 +51,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -64,6 +67,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this, "EEEEEEEEEE", Toast.LENGTH_SHORT).show();
             }
         });
+        crearPedido();
     }
 
     @Override
@@ -71,9 +75,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+            finish();
         } else {
             super.onBackPressed();
         }
+        finish();
     }
 
     @Override
@@ -119,13 +125,15 @@ public class MainActivity extends AppCompatActivity
             fragment = new ProductosFragment();
             fragmentTransaction = true;
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
 
 
 
-        } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_manage) {
+
+
+        } else if (id == R.id.cambiar_mesa) {
+            createDialog();
+
 
         } else if (id == R.id.nav_share) {
 
@@ -154,11 +162,75 @@ public class MainActivity extends AppCompatActivity
         editNameDialogFragment.show(fm, "fragment_edit_name");
     }
 
-    public static void cerrar(){
 
-        editNameDialogFragment.dismiss();
+    public  void crearPedido(){
+
+
+        RestClient restClient = new RestClient();
+        Retrofit retrofit = restClient.getRetrofit();
+
+
+        CartaService servicio = retrofit.create(CartaService.class);
+        Call<String> respuesta = servicio.setPedido(Login_QR.mesa);
+        final String[] respuesta2 = new String[1];
+        respuesta.enqueue(new Callback<String>() {
+
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+               Log.e("PEDIDO","CREADO");
+                respuesta2[0] =response.body();
+                id_pedido=Integer.parseInt(respuesta2[0]);
+                setPreferences();
+
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.i("allEvents", "ERROR12 : " + t.getMessage());
+            }
+        });
+
+    }
+    public void setPreferences(){
+        SharedPreferences.Editor editor = getSharedPreferences("estado", MODE_PRIVATE).edit();
+        editor.putInt("id_pedido", id_pedido);
+
+        editor.commit();
+        Toast.makeText(MainActivity.this, "setPreferences", Toast.LENGTH_SHORT).show();
+    }
+    public  void getPreferences(){
+        int name=0;
+        SharedPreferences prefs = getSharedPreferences("estado", MODE_PRIVATE);
+        String restoredText = prefs.getString("id_pedido", null);
+        if (restoredText != null) {
+            name = prefs.getInt("id_pedido", 0);//"No name defined" is the default value.
+            //0 is the default value.
+        }else {
+            setPreferences();
+        }
+        Toast.makeText(MainActivity.this, "getPreferences: "+name, Toast.LENGTH_SHORT).show();
     }
 
+    public void createDialog(){
+        new AlertDialog.Builder(MainActivity.this)
+                //.setTitle("Cambiar de mesa")
+                .setMessage("¿Está seguro de que quiere cambiar de mesa?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent i = getBaseContext().getPackageManager()
+                                .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(i);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                       dialog.dismiss();
+                    }
+                })
 
-
+                .show();
+    }
 }
+

@@ -2,6 +2,7 @@ package com.example.mk.proyectofinal.Adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mk.proyectofinal.Fragments.ProductosFragment;
 import com.example.mk.proyectofinal.MainActivity;
 import com.example.mk.proyectofinal.Modelo.Pedido;
 import com.example.mk.proyectofinal.Modelo.Productos;
@@ -24,7 +26,7 @@ import java.util.List;
 /**
  * Created by Mk on 31/05/2016.
  */
-public class ExpandList extends BaseExpandableListAdapter {
+public class CartaExpandAdapter extends BaseExpandableListAdapter {
 
     private Context _context;
     private List<String> _listDataHeader;
@@ -38,7 +40,7 @@ public class ExpandList extends BaseExpandableListAdapter {
     public static ArrayList<String> fromColumns;
     static View view2;
 
-    public ExpandList(Context context, List<String> tipos, HashMap<String, List<Productos>> producto) {
+    public CartaExpandAdapter(Context context, List<String> tipos, HashMap<String, List<Productos>> producto) {
         _listDataHeader = new ArrayList<>();
         for (String key : producto.keySet()) {
             System.out.println(key);
@@ -100,18 +102,19 @@ public class ExpandList extends BaseExpandableListAdapter {
             public void onClick(View v) {
                 //Pedido_Producto producto_pedido=new Pedido_Producto(1,producto.getId(),1,1,producto.getEstado(),1);
                 Productos producto1 = (Productos) getChild(groupPosition, childPosition);
-                productos_pedidos.add(producto1);
+                producto1.setTipo(((Productos) getChild(groupPosition, childPosition)).getTipo());
+                producto1.setId(((Productos) getChild(groupPosition, childPosition)).getId());
 
-               // showLocationDialog(productos_pedidos);
-                //mostrardialog2();
-                fromColumns = new ArrayList<>();
-                double suma=0;
-                for (Productos producto:productos_pedidos){
-                    fromColumns.add(producto.getProducto()+"   -   "+producto.getPrecio()+" E");
-                    suma=suma+producto.getPrecio();
+
+                Log.e("HO",""+producto1.getTipo());
+                if (productos_pedidos.contains(producto1)){
+                    producto1.setCant(producto1.getCant()+1);
+                }else {
+                    producto1.setCant(1);
+                    productos_pedidos.add(producto1);
                 }
 
-                fromColumns.add("TOTAL PEDIDO: "+suma+" €");
+
                 Toast.makeText(_context, "" + (((Productos) getChild(groupPosition, childPosition)).getProducto().toString()) + " añadido a pedido" , Toast.LENGTH_SHORT).show();
                 MainActivity.carro.setVisible(true);
             }
@@ -210,6 +213,7 @@ public class ExpandList extends BaseExpandableListAdapter {
                     .into(image);
 
         }
+        ProductosFragment.mProgressDialog.dismiss();
 
     }
 
