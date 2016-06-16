@@ -21,6 +21,8 @@ public interface CartaService {
 
     @GET("/proyectofinal/crear_pedido.php")
     Call<String> setPedido(@Query("mesa") int mesa) ;
+    @GET("/proyectofinal/crear_pedido.php")
+    Call<String> getPedido(@Query("mesa") int mesa) ;
 
     @GET("/proyectofinal/obtener_cuenta.php")
     Call<List<Pedido_Producto>> getCuenta(@Query("id_pedido") int id_pedido) ;

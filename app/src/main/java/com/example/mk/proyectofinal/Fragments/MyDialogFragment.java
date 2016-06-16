@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mk.proyectofinal.Adapters.CartaExpandAdapter;
 import com.example.mk.proyectofinal.Adapters.TicketAdapter;
@@ -47,6 +46,9 @@ public  class MyDialogFragment extends DialogFragment {
         // this method create view for your Dialog
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mProgressDialog = new ProgressDialog(getContext());
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Realizando pedido...");
         //inflate layout with recycler view
        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         View v = inflater.inflate(R.layout.reciclerticket, container, false);
@@ -85,7 +87,7 @@ public  class MyDialogFragment extends DialogFragment {
             pedido.setCantidad(producto1.getCant());
             pedido.setMesa(Login_QR.mesa);
             pedido.setNombre(producto1.getProducto());
-            Toast.makeText(getContext(), "NOMBRE PRODUCTO:"+pedido.getNombre(), Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getContext(), "NOMBRE PRODUCTO:"+pedido.getNombre(), Toast.LENGTH_SHORT).show();
             pedido.setId_producto(producto1.getId());
             Log.e("PEDIDOID",""+pedido.getId_producto());
             pedido.setId_pedido(MainActivity.id_pedido);
@@ -97,9 +99,7 @@ public  class MyDialogFragment extends DialogFragment {
     }
 
         public void hacerPedido(Pedido_Producto pedido){
-            mProgressDialog = new ProgressDialog(getContext());
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setMessage("Realizando pedido...");
+
             mProgressDialog.show();
 
 
@@ -132,7 +132,9 @@ public  class MyDialogFragment extends DialogFragment {
                         mProgressDialog.dismiss();
                         Log.i("allEvents", "ERROR12 : " + t.getMessage());
                     }
+
                 });
+
             //dismiss();
 
             }

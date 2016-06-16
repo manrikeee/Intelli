@@ -27,7 +27,7 @@ public class Login_QR extends Activity {
     private CameraSource cameraSource;
     private SurfaceView cameraView;
     private TextView barcodeInfo;
-    public static int mesa;
+    public static int mesa=1;
     Intent i = null;
     static ProgressDialog mProgressDialog;
 

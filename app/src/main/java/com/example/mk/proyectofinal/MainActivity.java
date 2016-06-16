@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this, "EEEEEEEEEE", Toast.LENGTH_SHORT).show();
             }
         });
-        crearPedido();
+        recibirPedido();
     }
 
     @Override
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public static void crearPedido(){
+    public void crearPedido() {
 
 
         RestClient restClient = new RestClient();
@@ -201,11 +201,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
 
-                respuesta2[0] =response.body();
-                id_pedido=Integer.parseInt(respuesta2[0]);
-                Log.e("PEDIDO","CREADO:"+respuesta2[0]);
-                CuentaFragment.estado=0;
-               // getPreferences();
+                respuesta2[0] = response.body();
+                id_pedido = Integer.parseInt(respuesta2[0]);
+                Log.e("PEDIDO", "CREADO:" + respuesta2[0]);
+                CuentaFragment.estado = 0;
+                getPreferences();
 
 
             }
@@ -213,6 +213,36 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Log.i("allEvents", "ERROR12 : " + t.getMessage());
+            }
+        });
+    }
+    public void recibirPedido(){
+
+
+        RestClient restClient = new RestClient();
+        Retrofit retrofit = restClient.getRetrofit();
+
+
+        CartaService servicio = retrofit.create(CartaService.class);
+        Call<String> respuesta = servicio.getPedido(Login_QR.mesa);
+        final String[] respuesta2 = new String[1];
+        respuesta.enqueue(new Callback<String>() {
+
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+
+                respuesta2[0] =response.body();
+                id_pedido=Integer.parseInt(respuesta2[0]);
+                Log.e("PEDIDO","CREADO:"+respuesta2[0]);
+                CuentaFragment.estado=0;
+                getPreferences();
+
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                crearPedido();
             }
         });
 
