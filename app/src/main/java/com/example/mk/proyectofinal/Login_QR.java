@@ -32,11 +32,12 @@ public class Login_QR extends Activity {
     static ProgressDialog mProgressDialog;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_qr);
-        getPreferences();
+        //getPreferences();
 
         cameraView = (SurfaceView) findViewById(R.id.camera_view);
         barcodeInfo = (TextView) findViewById(R.id.code_info);
@@ -50,6 +51,7 @@ public class Login_QR extends Activity {
                 .Builder(this, barcodeDetector)
                 .setRequestedPreviewSize(640, 480)
                 .build();
+
 
         cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
@@ -97,6 +99,7 @@ public class Login_QR extends Activity {
                     String qr;
                     qr = String.valueOf(barcodes.valueAt(0).displayValue).substring(0, 1);
                     if (qr.equals("1")) {
+                       // cameraView.setVisibility(View.INVISIBLE);
 
                         mesa=Integer.parseInt(qr);
 

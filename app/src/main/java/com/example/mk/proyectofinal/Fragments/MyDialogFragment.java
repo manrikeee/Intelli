@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mk.proyectofinal.Adapters.CartaExpandAdapter;
 import com.example.mk.proyectofinal.Adapters.TicketAdapter;
@@ -37,6 +38,7 @@ public  class MyDialogFragment extends DialogFragment {
     static TextView total;
     public TextView pedir;
     static ProgressDialog mProgressDialog;
+    static int a=0;
 
 
     static MyDialogFragment newInstance() {
@@ -46,6 +48,9 @@ public  class MyDialogFragment extends DialogFragment {
         // this method create view for your Dialog
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if( MainActivity.estado==0){
+            MainActivity.crearPedido();
+        }
         mProgressDialog = new ProgressDialog(getContext());
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setMessage("Realizando pedido...");
@@ -115,8 +120,7 @@ public  class MyDialogFragment extends DialogFragment {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
 //                        Toast.makeText(getActivity(), "Pedido Realizado", Toast.LENGTH_SHORT).show();;
-                        mProgressDialog.dismiss();
-                        dismiss();
+
                         CartaExpandAdapter.productos_pedidos.clear();
                         MainActivity.carro.setVisible(false);
                         CartaExpandAdapter.productos_totales=0;
@@ -129,11 +133,21 @@ public  class MyDialogFragment extends DialogFragment {
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
+                        a=1;
                         mProgressDialog.dismiss();
-                        Log.i("allEvents", "ERROR12 : " + t.getMessage());
+                        dismiss();
+                        Toast.makeText(getContext(), "Problemas de conexión, compruebe productos pedidos en ver ticket.", Toast.LENGTH_SHORT).show();
                     }
 
+
                 });
+            if (a==0) {
+                Toast.makeText(getContext(), "Pedido realizado satisfactoriamente.", Toast.LENGTH_SHORT).show();
+
+            }else{ Toast.makeText(getContext(), "Problemas de conexión, compruebe productos pedidos en ver ticket.", Toast.LENGTH_SHORT).show();
+
+            }mProgressDialog.dismiss();
+            dismiss();
 
             //dismiss();
 

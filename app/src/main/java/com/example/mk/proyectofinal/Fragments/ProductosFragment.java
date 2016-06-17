@@ -75,6 +75,7 @@ public class ProductosFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getCarta();
         super.onCreate(savedInstanceState);
 
     }
@@ -93,7 +94,7 @@ public class ProductosFragment extends Fragment {
 //        layout.setOrientation(LinearLayoutManager.VERTICAL);
 //        card.setLayoutManager(layout);
        elv  = (ExpandableListView) view.findViewById(R.id.lvExp);
-        getCarta();
+
 
 //        getCarta();
        return view;

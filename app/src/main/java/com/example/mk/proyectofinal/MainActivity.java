@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.mk.proyectofinal.Fragments.CuentaFragment;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity
     static int mNotifCount = 0;
     public static MenuItem carro;
     public static int id_pedido;
+    public static int estado=1;
 
     View view;
 
@@ -91,9 +93,11 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem item = menu.findItem(R.id.action_settings);
         MenuItemCompat.setActionView(item, R.layout.feed_update_count);
-        notifCount = (Button) MenuItemCompat.getActionView(item);
+        RelativeLayout layout = (RelativeLayout) MenuItemCompat.getActionView(item);
+        notifCount= (Button) layout.findViewById(R.id.notif_count);
         notifCount.setText("1");
         carro=item;
+
         carro.setVisible(false);
         notifCount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,7 +190,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void crearPedido() {
+    public static void crearPedido() {
 
 
         RestClient restClient = new RestClient();
@@ -200,12 +204,12 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-
+                estado=1;
                 respuesta2[0] = response.body();
                 id_pedido = Integer.parseInt(respuesta2[0]);
                 Log.e("PEDIDO", "CREADO:" + respuesta2[0]);
-                CuentaFragment.estado = 0;
-                getPreferences();
+
+
 
 
             }
@@ -234,8 +238,11 @@ public class MainActivity extends AppCompatActivity
                 respuesta2[0] =response.body();
                 id_pedido=Integer.parseInt(respuesta2[0]);
                 Log.e("PEDIDO","CREADO:"+respuesta2[0]);
-                CuentaFragment.estado=0;
+
                 getPreferences();
+                if(id_pedido==0){
+                    crearPedido();
+                }
 
 
             }
@@ -288,5 +295,6 @@ public class MainActivity extends AppCompatActivity
 
                 .show();
     }
+
 }
 

@@ -40,7 +40,7 @@ public class CuentaFragment extends Fragment {
     public static double total;
     public static TextView totalview;
     public static FloatingActionButton pedircuenta;
-    public static int estado=0;
+
 
     public CuentaFragment()
     {
@@ -75,6 +75,9 @@ public class CuentaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        if( MainActivity.estado==0){
+            MainActivity.crearPedido();
+        }
         View view=  inflater.inflate(R.layout.fragment_cuenta, container, false);
         mRecyclerView = (RecyclerView) view.getRootView().findViewById(R.id.RecView);
         totalview= (TextView) view.findViewById(R.id.total_cuenta);
@@ -200,6 +203,7 @@ public class CuentaFragment extends Fragment {
                 Toast.makeText(getContext(), "Cuenta pedida", Toast.LENGTH_SHORT).show();
                 productos.clear();
                 adapter= new CuentaAdapter(productos);
+                MainActivity.estado=0;
 
                 mRecyclerView.setAdapter(adapter);
                 totalview.setText("");
