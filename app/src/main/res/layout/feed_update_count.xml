@@ -11,9 +11,9 @@
 
 <ImageView
     android:id="@+id/hotlist_bell"
-    android:src="@drawable/carro"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:src="@drawable/carr0"
+    android:layout_width="42dp"
+    android:layout_height="42dp"
     android:gravity="center"
     android:layout_margin="0dp"
     android:contentDescription="bell"
@@ -23,15 +23,17 @@
     android:id="@+id/notif_count"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:minWidth="32dp"
-    android:minHeight="32dp"
-    android:background="@drawable/badge"
+    android:minWidth="22dp"
+    android:minHeight="22dp"
+    android:background="@drawable/bage_circle"
 
-    android:text="0"
+    android:text="1"
     android:textSize="16sp"
     android:textColor="@android:color/white"
-    android:gravity="center"
+
     android:padding="2dp"
-    android:singleLine="true">
+    android:singleLine="true"
+    android:layout_centerVertical="true"
+    android:layout_alignStart="@+id/hotlist_bell">
 </Button>
 </RelativeLayout>

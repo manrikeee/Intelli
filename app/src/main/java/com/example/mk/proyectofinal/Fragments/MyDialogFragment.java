@@ -2,8 +2,11 @@ package com.example.mk.proyectofinal.Fragments;
 
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +41,7 @@ public  class MyDialogFragment extends DialogFragment {
     private RecyclerView mRecyclerView;
     private TicketAdapter adapter;
     static TextView total;
-    public TextView pedir;
+    public FloatingActionButton pedir,seguir;
     static ProgressDialog mProgressDialog;
     static int a=0;
 
@@ -56,16 +61,28 @@ public  class MyDialogFragment extends DialogFragment {
         mProgressDialog.setMessage("Realizando pedido...");
         //inflate layout with recycler view
        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        View e=getDialog().getWindow().getDecorView();
+        e.setBackgroundResource(android.R.color.transparent);
         View v = inflater.inflate(R.layout.reciclerticket, container, false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.RecView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         total= (TextView) v.findViewById(R.id.ptotal);
-        pedir=(TextView) v.findViewById(R.id.bpedir);
+        pedir=(FloatingActionButton) v.findViewById(R.id.bpedir);
+        seguir=(FloatingActionButton) v.findViewById(R.id.bseguir);
+        seguir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        Animation startAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.blinking_animation);
+        pedir.startAnimation(startAnimation);
         pedir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                crearPedido();
+              createDialog2();
             }
         });
         //setadapter
@@ -77,6 +94,7 @@ public  class MyDialogFragment extends DialogFragment {
         return v;
     }
     public static void Actualizartotal(){
+
         TicketAdapter.total=0;
         for (Productos producto: CartaExpandAdapter.productos_pedidos){
             Double precio=Double.parseDouble(String.valueOf(producto.getPrecio()));
@@ -123,9 +141,10 @@ public  class MyDialogFragment extends DialogFragment {
 
                         CartaExpandAdapter.productos_pedidos.clear();
                         MainActivity.carro.setVisible(false);
+                        MainActivity.carro2.setVisible(false);
                         CartaExpandAdapter.productos_totales=0;
                         MainActivity.notifCount.setText(String.valueOf(CartaExpandAdapter.productos_totales));
-
+                        MainActivity.notifCount2.setText(String.valueOf(CartaExpandAdapter.productos_totales));
 
 
 
@@ -152,6 +171,23 @@ public  class MyDialogFragment extends DialogFragment {
             //dismiss();
 
             }
+    public void createDialog2(){
+        new AlertDialog.Builder(getContext())
+                .setTitle("Hacer pedido")
+                .setMessage("¿Desea realizar el pedido?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        crearPedido();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+
+                .show();
+    }
 }
 
 

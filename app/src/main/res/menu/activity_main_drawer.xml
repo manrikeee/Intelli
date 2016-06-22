@@ -4,26 +4,27 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@android:drawable/ic_menu_view"
             android:title="Carta" />
 
 
         <item
-            android:id="@+id/cambiar_mesa"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Cambiar de mesa" />
+            android:id="@+id/realizar_pedido"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Realizar pedido" />
     </group>
 
     <item android:title="Información">
         <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Llamar camarero" />
+
             <item
                 android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_cast_on_light"
                 android:title="Ver/Pedir cuenta" />
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@android:drawable/ic_menu_set_as"
+                android:title="Salir" />
         </menu>
     </item>
 

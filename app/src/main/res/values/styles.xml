@@ -13,7 +13,14 @@
        <!-- <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>-->
         android:windowTranslucentStatus
+
+    </style>
+    <style name="SplashTheme2" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/bienvenido</item>
+        <!-- <item name="android:windowTranslucentStatus">true</item>
+         <item name="android:windowTranslucentNavigation">true</item>-->
         android:windowTranslucentStatus
+
     </style>
             <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

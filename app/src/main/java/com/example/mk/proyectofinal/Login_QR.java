@@ -5,12 +5,15 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +30,7 @@ public class Login_QR extends Activity {
     private CameraSource cameraSource;
     private SurfaceView cameraView;
     private TextView barcodeInfo;
-    public static int mesa=1;
+    public static int mesa;
     Intent i = null;
     static ProgressDialog mProgressDialog;
 
@@ -38,9 +41,11 @@ public class Login_QR extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_qr);
         //getPreferences();
+RelativeLayout layout= (RelativeLayout) findViewById(R.id.uno);
+        layout.getBackground().setColorFilter(Color.parseColor("#4E342E"), PorterDuff.Mode.DARKEN);
 
         cameraView = (SurfaceView) findViewById(R.id.camera_view);
-        barcodeInfo = (TextView) findViewById(R.id.code_info);
+        //barcodeInfo = (TextView) findViewById(R.id.code_info);
 
         barcodeDetector =
                 new BarcodeDetector.Builder(this)
@@ -98,7 +103,7 @@ public class Login_QR extends Activity {
 
                     String qr;
                     qr = String.valueOf(barcodes.valueAt(0).displayValue).substring(0, 1);
-                    if (qr.equals("1")) {
+                    if (qr.equals("1") || qr.equals("2") || qr.equals("3") || qr.equals("4") || qr.equals("5") || qr.equals("6")) {
                        // cameraView.setVisibility(View.INVISIBLE);
 
                         mesa=Integer.parseInt(qr);
@@ -110,7 +115,7 @@ public class Login_QR extends Activity {
                     }
 
 
-                    barcodeInfo.post(new Runnable() {    // Use the post method of the TextView
+                   /* barcodeInfo.post(new Runnable() {    // Use the post method of the TextView
                         public void run() {
 
                             barcodeInfo.setText(    // Update the TextView
@@ -120,7 +125,7 @@ public class Login_QR extends Activity {
                             );
 
                         }
-                    });
+                    });*/
 
 
                 }
@@ -134,11 +139,12 @@ public class Login_QR extends Activity {
 
         if (i==null) {
 
-            i = new Intent(this, MainActivity.class);
+            i = new Intent(this, SplashActivity2.class);
             startActivity(i);
 
             mProgressDialog.dismiss();
             Toast.makeText(Login_QR.this, "Bienvenido. Sentado en mesa: "+mesa, Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 
@@ -149,14 +155,14 @@ public class Login_QR extends Activity {
         barcodeDetector.release();
     }
 
-    public void comprobarQR() {
+   /* public void comprobarQR() {
 
         if (barcodeInfo.getText().toString().equals("1")) {
             Toast.makeText(Login_QR.this, "Bienvenido. Sentado en ", Toast.LENGTH_SHORT).show();
             lanzarActivity();
 
         }
-    }
+    }*/
 
 
     public void getPreferences() {

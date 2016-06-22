@@ -21,7 +21,8 @@
 
             android:id="@+id/producto"
             android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -30,7 +31,8 @@
             android:text="Uds"
             android:id="@+id/textView3"
             android:layout_alignBottom="@+id/producto"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,13 +41,16 @@
             android:text="Precio"
             android:id="@+id/textView5"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:textStyle="bold" />
         <View
             android:layout_below="@+id/producto"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@android:color/background_dark"/>
         <android.support.v7.widget.RecyclerView
+            android:scrollbars="vertical"
+            android:fadeScrollbars="true"
             android:id="@+id/RecView"
 
             android:layout_width="match_parent"
@@ -54,7 +59,9 @@
             android:layout_below="@id/producto"
 
 
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_above="@+id/view" />
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/pedircuenta"
             android:layout_width="wrap_content"
@@ -65,29 +72,40 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true" />
+            android:layout_centerHorizontal="true" />
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/profile_edit_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:clickable="true"
-            android:src="@drawable/places_ic_clear"
+            android:src="@android:drawable/ic_menu_revert"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="20dp" />
-
+            android:layout_marginBottom="20dp"
+            android:tint="@color/cardview_light_background"
+            android:visibility="invisible"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/background_dark"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Total"
+            android:text="P.V.P TOTAL"
             android:id="@+id/ptotal"
             android:singleLine="false"
-            android:layout_below="@+id/RecView"
-            android:layout_toStartOf="@+id/total_cuenta" />
+            android:layout_alignTop="@+id/total_cuenta"
+            android:layout_alignParentStart="true" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray"
+            android:layout_above="@id/ptotal"
+            android:id="@+id/view" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -96,10 +114,10 @@
             android:text="Total"
             android:id="@+id/total_cuenta"
             android:singleLine="false"
-            android:layout_marginRight="20dp"
-            android:layout_below="@+id/RecView"
-            android:layout_alignEnd="@+id/profile_edit_fab"
-            android:layout_marginLeft="10dp" />
+            android:layout_above="@+id/profile_edit_fab"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="5dp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
 

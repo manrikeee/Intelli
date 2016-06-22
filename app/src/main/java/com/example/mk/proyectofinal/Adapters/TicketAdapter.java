@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mk.proyectofinal.Fragments.MyDialogFragment;
 import com.example.mk.proyectofinal.MainActivity;
@@ -23,10 +24,11 @@ import java.util.List;
 public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ItemViewHolder>{
     List<Productos> horas;
     public static double total=0;
-    MyDialogFragment dialog;
+    public MyDialogFragment dialog;
 
     public TicketAdapter(List<String> horas, MyDialogFragment dialog) {
         MainActivity.carro.setVisible(true);
+        MainActivity.carro2.setVisible(true);
         this.dialog=dialog;
 
         this.horas = CartaExpandAdapter.productos_pedidos;
@@ -53,7 +55,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ItemViewHo
                 horas.get(position).setCant(horas.get(position).getCant()-1);
                 if (horas.get(position).getCant()<1) {
 
-                    CartaExpandAdapter.productos_totales=0;
+                    //CartaExpandAdapter.productos_totales--;
                     CartaExpandAdapter.productos_pedidos.remove(position);
                 }else{
 
@@ -63,11 +65,16 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ItemViewHo
                 if((horas.size()==0) ){
                     CartaExpandAdapter.productos_pedidos.clear();
                     MainActivity.carro.setVisible(false);
+                    MainActivity.carro2.setVisible(false);
                     dialog.dismiss();
                 }
+
                 Log.e("ERRORR",""+CartaExpandAdapter.productos_pedidos.toString());
+
                 CartaExpandAdapter.productos_totales--;
                 MainActivity.notifCount.setText(String.valueOf(CartaExpandAdapter.productos_totales));
+                MainActivity.notifCount2.setText(String.valueOf(CartaExpandAdapter.productos_totales));
+                Toast.makeText(dialog.getContext(), "Producto eliminado", Toast.LENGTH_SHORT).show();
 
 
 

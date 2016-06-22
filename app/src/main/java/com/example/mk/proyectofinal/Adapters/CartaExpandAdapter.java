@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -40,6 +42,8 @@ public class CartaExpandAdapter extends BaseExpandableListAdapter {
     public static ArrayList<String> fromColumns;
     static View view2;
     public static int  productos_totales=0;
+    public static int lastExpandedGroupPosition;
+    public Animation animation;
 
     public CartaExpandAdapter(Context context, List<String> tipos, HashMap<String, List<Productos>> producto) {
         _listDataHeader = new ArrayList<>();
@@ -73,21 +77,28 @@ public class CartaExpandAdapter extends BaseExpandableListAdapter {
     }
 
 
+
+
     @Override
     public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            LayoutInflater infalInflater = (LayoutInflater) this._context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = infalInflater.inflate(R.layout.list_item, null);
+        }
+
         vistahijo=convertView;
+        animation = AnimationUtils.loadAnimation(_context, R.anim.rotate_animation);
+        convertView.startAnimation(animation);
 
 
         final Productos producto = (Productos) getChild(groupPosition, childPosition);
         final String childText = getGroup(groupPosition).toString();
         final Productos expandedListText = (Productos) getChild(groupPosition, childPosition);
 
-        if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this._context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_item, null);
-        }
+
+
 
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.nombre);
@@ -118,8 +129,10 @@ public class CartaExpandAdapter extends BaseExpandableListAdapter {
 
                 Toast.makeText(_context, "" + (((Productos) getChild(groupPosition, childPosition)).getProducto().toString()) + " añadido a pedido" , Toast.LENGTH_SHORT).show();
                 MainActivity.carro.setVisible(true);
+                MainActivity.carro2.setVisible(true);
                 productos_totales++;
                 MainActivity.notifCount.setText(String.valueOf(productos_totales));
+                MainActivity.notifCount2.setText(String.valueOf(CartaExpandAdapter.productos_totales));
             }
 
         });
@@ -153,9 +166,27 @@ public class CartaExpandAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
+    public void onGroupCollapsed(int groupPosition) {
+        super.onGroupCollapsed(groupPosition);
+    }
+
+    @Override
+    public void onGroupExpanded(int groupPosition) {
+        if(groupPosition != lastExpandedGroupPosition){
+           ProductosFragment.elv.collapseGroup(lastExpandedGroupPosition);
+
+        }
+
+        super.onGroupExpanded(groupPosition);
+        lastExpandedGroupPosition = groupPosition;
+    }
+
+
+    @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
+
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -189,7 +220,7 @@ public class CartaExpandAdapter extends BaseExpandableListAdapter {
             Context context = this._context;
             Picasso.with(context)
                     .load(R.drawable.jarra2)
-                    .resize(200, 200)
+                    .resize(120, 120)
 
 
                     .into(image)
@@ -200,7 +231,7 @@ public class CartaExpandAdapter extends BaseExpandableListAdapter {
             Context context = this._context;
             Picasso.with(context)
                     .load(R.drawable.carne3)
-                    .resize(250, 250)
+                    .resize(120, 120)
 
 
                     .into(image);
@@ -210,7 +241,27 @@ public class CartaExpandAdapter extends BaseExpandableListAdapter {
             Context context = this._context;
             Picasso.with(context)
                     .load(R.drawable.pescao2)
-                    .resize(250, 250)
+                    .resize(120, 120)
+
+
+                    .into(image);
+
+        }
+        if (tipo.equals("Postres")) {
+            Context context = this._context;
+            Picasso.with(context)
+                    .load(R.drawable.brownie)
+                    .resize(120, 120)
+
+
+                    .into(image);
+
+        }
+        if (tipo.equals("Verde")) {
+            Context context = this._context;
+            Picasso.with(context)
+                    .load(R.drawable.tomate)
+                    .resize(120, 120)
 
 
                     .into(image);

@@ -2,6 +2,8 @@ package com.example.mk.proyectofinal.Fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +44,7 @@ public class CuentaFragment extends Fragment {
     public static double total;
     public static TextView totalview;
     public static FloatingActionButton pedircuenta;
-
+    public Animation animation;
 
     public CuentaFragment()
     {
@@ -78,7 +82,9 @@ public class CuentaFragment extends Fragment {
         if( MainActivity.estado==0){
             MainActivity.crearPedido();
         }
+
         View view=  inflater.inflate(R.layout.fragment_cuenta, container, false);
+        view.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         mRecyclerView = (RecyclerView) view.getRootView().findViewById(R.id.RecView);
         totalview= (TextView) view.findViewById(R.id.total_cuenta);
         pedircuenta= (FloatingActionButton) view.findViewById(R.id.pedircuenta);
@@ -87,6 +93,10 @@ public class CuentaFragment extends Fragment {
         mRecyclerView.setLayoutManager(llmanager);
         total=0;
         ObtenerCuenta();
+        animation = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_animation);
+      view.startAnimation(animation);
+
+
         pedircuenta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,6 +168,8 @@ public class CuentaFragment extends Fragment {
                     mProgressDialog.dismiss();
                     calcularPrecio(productos);
                     adapter= new CuentaAdapter(productos);
+                    Animation startAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.blinking_animation);
+                    pedircuenta.startAnimation(startAnimation);
 
                     mRecyclerView.setAdapter(adapter);
                 }
@@ -165,7 +177,8 @@ public class CuentaFragment extends Fragment {
                 @Override
                 public void onFailure(Call<List<Pedido_Producto>> call, Throwable t) {
                     mProgressDialog.dismiss();
-                    Toast.makeText(getContext(), "No tiene cuenta pendiente: "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                    pedircuenta.hide();
+                    Toast.makeText(getContext(), "No tiene cuenta pendiente ", Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -177,7 +190,7 @@ public class CuentaFragment extends Fragment {
           double precio=CuentaAdapter.dimePrecio(pedido.getId_producto())* pedido.getCantidad();
             total=total+precio;
         }
-        totalview.setText(String.valueOf(total));
+        totalview.setText(String.valueOf(total)+" €");
 
 
     }
@@ -193,12 +206,13 @@ public class CuentaFragment extends Fragment {
 
 
         CartaService servicio = retrofit.create(CartaService.class);
-        Call<String> respuesta = servicio.pedirCuenta();
+        Call<String> respuesta = servicio.pedirCuenta(MainActivity.id_pedido);
         productos = new ArrayList<>();
 
         respuesta.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
+                pedircuenta.hide();
                 mProgressDialog.dismiss();
                 Toast.makeText(getContext(), "Cuenta pedida", Toast.LENGTH_SHORT).show();
                 productos.clear();
@@ -220,5 +234,6 @@ public class CuentaFragment extends Fragment {
 
             });
         }
+
     }
 

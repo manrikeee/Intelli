@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ExpandableListView;
 
 import com.example.mk.proyectofinal.Adapters.CartaExpandAdapter;
@@ -40,13 +42,14 @@ public class ProductosFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    public Animation animation;
 
 
     public static List<Productos> productos;
     public static List<String> tipos;
     View view;
     public static ProgressDialog mProgressDialog;
-    ExpandableListView elv;
+   public static ExpandableListView elv;
     HashMap <String,List<Productos>> productosHash = new HashMap<String,List<Productos>>();
 
     private OnFragmentInteractionListener mListener;
@@ -85,7 +88,8 @@ public class ProductosFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_productos, container, false);
 //
-//
+          animation = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_animation);
+       view.startAnimation(animation);
         productos = new ArrayList<>();
 //
 //
@@ -94,6 +98,8 @@ public class ProductosFragment extends Fragment {
 //        layout.setOrientation(LinearLayoutManager.VERTICAL);
 //        card.setLayoutManager(layout);
        elv  = (ExpandableListView) view.findViewById(R.id.lvExp);
+
+
 
 
 //        getCarta();

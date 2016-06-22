@@ -2,7 +2,6 @@ package com.example.mk.proyectofinal;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -36,9 +35,10 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
   public  static FragmentManager fm;
-    public static Button notifCount;
+    public static Button notifCount,notifCount2;
     static int mNotifCount = 0;
     public static MenuItem carro;
+    public static MenuItem carro2;
     public static int id_pedido;
     public static int estado=1;
 
@@ -54,6 +54,13 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
          fm = this.getSupportFragmentManager();
 
+        Fragment fragment = new ProductosFragment();
+        getSupportFragmentManager().popBackStack();
+        getSupportFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.fragment1, fragment)
+                .commit();
+
 
 
 
@@ -62,6 +69,8 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
+
+
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -72,19 +81,29 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this, "EEEEEEEEEE", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+      MenuItem item= navigationView.getMenu().findItem(R.id.realizar_pedido);
+        MenuItemCompat.setActionView(item, R.layout.feed);
+        //MenuItemCompat.setActionView(item, R.layout.feed_update_count);
+        RelativeLayout layout = (RelativeLayout) MenuItemCompat.getActionView(item);
+        notifCount2= (Button) layout.findViewById(R.id.notif_count);
+        notifCount2.setText("1");
+        carro2=item;
+
+        carro2.setVisible(false);
+
+
+
         recibirPedido();
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-            finish();
-        } else {
-            super.onBackPressed();
-        }
-        finish();
+
+
+        createDialog2();
+
     }
 
     @Override
@@ -105,15 +124,6 @@ public class MainActivity extends AppCompatActivity
                 showdialog();
             }
         });
-
-
-
-
-
-
-
-
-
 
        // MenuItem menuItem = menu.findItem(R.id.carro);
        // menuItem.setIcon(buildCounterDrawable(count, R.drawable.ic_menu_gallery));
@@ -156,11 +166,12 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        } else if (id == R.id.cambiar_mesa) {
-            createDialog();
+        } else if (id == R.id.realizar_pedido) {
+          showdialog();
 
 
         } else if (id == R.id.nav_share) {
+            createDialog2();
 
         } else if (id == R.id.nav_send) {
             fragment = new CuentaFragment();
@@ -168,7 +179,9 @@ public class MainActivity extends AppCompatActivity
 
         }
         if (fragmentTransaction) {
+            getSupportFragmentManager().popBackStack();
             getSupportFragmentManager().beginTransaction()
+                    .addToBackStack(null)
                     .replace(R.id.fragment1, fragment)
                     .commit();
         }
@@ -186,7 +199,10 @@ public class MainActivity extends AppCompatActivity
 
 
 
+
+
         editNameDialogFragment.show(fm, "fragment_edit_name");
+
     }
 
 
@@ -239,7 +255,7 @@ public class MainActivity extends AppCompatActivity
                 id_pedido=Integer.parseInt(respuesta2[0]);
                 Log.e("PEDIDO","CREADO:"+respuesta2[0]);
 
-                getPreferences();
+
                 if(id_pedido==0){
                     crearPedido();
                 }
@@ -254,26 +270,8 @@ public class MainActivity extends AppCompatActivity
         });
 
     }
-    public void setPreferences(){
-        SharedPreferences.Editor editor = getSharedPreferences("estado", MODE_PRIVATE).edit();
-        editor.putInt("id_pedido", id_pedido);
 
-        editor.commit();
-        Toast.makeText(MainActivity.this, "setPreferences", Toast.LENGTH_SHORT).show();
-    }
-    public  void getPreferences(){
-        int name=0;
-        SharedPreferences prefs = getSharedPreferences("estado", MODE_PRIVATE);
-        int restoredText = prefs.getInt("id_pedido", 0);
-        if (restoredText !=0) {
-            name = prefs.getInt("id_pedido", 0);//"No name defined" is the default value.
-            //0 is the default value.
-        }if (restoredText!=id_pedido) {
 
-            setPreferences();
-        }
-        Toast.makeText(MainActivity.this, "getPreferences: "+name, Toast.LENGTH_SHORT).show();
-    }
 
     public void createDialog(){
         new AlertDialog.Builder(MainActivity.this)
@@ -290,6 +288,23 @@ public class MainActivity extends AppCompatActivity
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                        dialog.dismiss();
+                    }
+                })
+
+                .show();
+    }
+    public void createDialog2(){
+        new AlertDialog.Builder(MainActivity.this)
+                //.setTitle("Cambiar de mesa")
+                .setMessage("¿Está seguro de que quiere salir ?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                     }
                 })
 

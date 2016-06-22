@@ -3,17 +3,20 @@
     android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="wrap_content"
 
-    android:background="@color/colorPrimaryDark"
+    android:background="@drawable/dialog_bg"
     android:weightSum="1">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/re"
-        >
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="5dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Producto"/>
+            android:text="Producto"
+            android:textStyle="bold"
+            android:textSize="17dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -21,7 +24,9 @@
             android:text="Uds"
             android:id="@+id/textView4"
             android:layout_gravity="center_horizontal|top"
-            android:layout_marginRight="30dp" />
+            android:paddingLeft="10dp"
+            android:textStyle="bold"
+            android:textSize="17dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,9 +34,15 @@
             android:text="Precio"
             android:id="@+id/precio2"
             android:layout_gravity="right|top"
-            android:layout_marginRight="40dp" />
+            android:layout_marginRight="15dp"
+            android:textStyle="bold"
+            android:textSize="17dp" />
 
     </FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray"/>
 
 
 
@@ -39,23 +50,23 @@
         android:id="@+id/RecView"
 
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="0dp"
 
-        android:layout_marginBottom="50dp"
         android:layout_below="@id/re"
         android:layout_above="@+id/linear"
+        android:clipToPadding = "false"
 
+        android:scrollbars="vertical"
+        android:layout_marginTop="0dp" />
 
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_weight="0.49" />
-
-
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:id="@+id/linear"
         android:layout_alignBottom="@id/RecView"
 
@@ -69,23 +80,13 @@
             android:text="Total:"
             android:id="@+id/ptotal"
             android:layout_marginLeft="0dp"
-            android:layout_alignTop="@+id/ptotal2"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="48dp">
+            android:textStyle="bold"
+            android:layout_marginRight="7dp"
+            android:textSize="20dp"
+            android:layout_marginTop="15dp">
 
         </TextView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/ptotal2"
-            android:textSize="20dp"
-
-            android:text="TOTAL"
-            android:layout_marginLeft="355dp"
-            android:layout_alignParentBottom="true"
-            android:layout_toStartOf="@+id/ptotal"
-            android:layout_marginEnd="41dp" />
 
 
     </RelativeLayout>
@@ -96,29 +97,34 @@
 
         android:layout_alignBottom="@id/linear"
         android:layout_alignParentStart="true"
-        android:layout_weight="0.93">
+        android:layout_weight="0.93"
+        android:layout_marginTop="30dp">
 
 
 
         >
-    <TextView
+        <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pedir"
         android:id="@+id/bpedir"
         android:textSize="30dp"
+            android:src="@drawable/cast_ic_notification_on"
 
-         />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
 
 
-    <TextView
+        <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Seguir "
         android:id="@+id/bseguir"
-        android:layout_alignBottom="@+id/bpedir"
-        android:layout_alignParentEnd="true"
-        android:textSize="30dp" />
+            android:textSize="30dp"
+            android:src="@android:drawable/ic_menu_revert"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:tint="@color/background_floating_material_light" />
 
     </RelativeLayout>
 </LinearLayout>
